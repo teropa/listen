@@ -11,6 +11,7 @@ module Listen
     autoload :Darwin,  'listen/adapters/darwin'
     autoload :Linux,   'listen/adapters/linux'
     autoload :Windows, 'listen/adapters/windows'
+    autoload :Java,    'listen/adapters/java'
     autoload :Polling, 'listen/adapters/polling'
   end
 

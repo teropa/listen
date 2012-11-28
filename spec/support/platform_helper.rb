@@ -9,3 +9,7 @@ end
 def windows?
   RbConfig::CONFIG['target_os'] =~ /mswin|mingw/i
 end
+
+def java?
+  RUBY_PLATFORM == "java"
+end

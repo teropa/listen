@@ -41,7 +41,9 @@ module Listen
       warning = ''
 
       begin
-        if Adapters::Darwin.usable_and_works?(directories, options)
+        if Adapters::Java.usable_and_works?(directories, options)
+          return Adapters::Java.new(directories, options, &callback)
+        elsif Adapters::Darwin.usable_and_works?(directories, options)
           return Adapters::Darwin.new(directories, options, &callback)
         elsif Adapters::Linux.usable_and_works?(directories, options)
           return Adapters::Linux.new(directories, options, &callback)

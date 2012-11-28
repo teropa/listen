@@ -22,6 +22,7 @@ describe Listen::Adapter do
       Listen::Adapters::Darwin.stub(:usable_and_works?) { false }
       Listen::Adapters::Linux.stub(:usable_and_works?) { false }
       Listen::Adapters::Windows.stub(:usable_and_works?) { false }
+      Listen::Adapters::Java.stub(:usable_and_works?) { false }
     end
 
     context "with no specific adapter usable" do
@@ -111,9 +112,25 @@ describe Listen::Adapter do
         end
       end
     end
+
+    context "on Java" do
+      before { Listen::Adapters::Java.stub(:usable_and_works?) { true } }
+
+      it "uses Listen::Adapters::Java" do
+        Listen::Adapters::Java.should_receive(:new).with('dir', {})
+        described_class.select_and_initialize('dir')
+      end
+
+      context 'when the use of the polling adapter is forced' do
+        it 'uses Listen::Adapters::Polling' do
+          Listen::Adapters::Polling.should_receive(:new).with('dir', {})
+          described_class.select_and_initialize('dir', :force_polling => true)
+        end
+      end
+    end
   end
 
-  [Listen::Adapters::Darwin, Listen::Adapters::Linux, Listen::Adapters::Windows].each do |adapter_class|
+  [Listen::Adapters::Darwin, Listen::Adapters::Linux, Listen::Adapters::Windows, Listen::Adapters::Java].each do |adapter_class|
     if adapter_class.usable?
       describe '.usable?' do
         it 'checks the dependencies' do
